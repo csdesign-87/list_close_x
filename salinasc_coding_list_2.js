@@ -3,31 +3,38 @@ var string = [];
 const list = document.querySelector("#list");
 const listTodo = document.querySelector("#listTodo");
 
-function deleteTodo(event, count){
-	// I need to determine which todo item was clicked
+function deleteTodo(event, countlist){
 
-	string.splice(count, 1);
+	string.splice(countlist, 1);
 
 	const listItems = string.map(alist =>`
-	<li>${alist.value}<button onclick="deleteTodo(event, ${alist.count})">x</button><button onclick="complete(event)">completed</button></li>`
+	<li class="${alist.complete ? 'crossout' : ''}">${alist.value}<button onclick="deleteTodo(event, ${string.indexOf(alist)})">x</button><button onclick="complete(event,${string.indexOf(alist)})">completed</button></li>`
 	);
 	
 	// Add the mapped output to the html
 	listTodo.innerHTML = listItems.join("");
 }
 
-function complete(event)
+function complete(event, countlist)
 {
 	console.log(event);
+	string[countlist].complete = true;
+
+	const listItems = string.map(alist =>`
+	<li class="${alist.complete ? 'crossout' : ''}">${alist.value}<button onclick="deleteTodo(event, ${string.indexOf(alist)})">x</button><button onclick="complete(event,${string.indexOf(alist)})">completed</button></li>`
+	);
+	
+	// Add the mapped output to the html
+	listTodo.innerHTML = listItems.join("");
 }
 
 document.querySelector('#label').addEventListener("submit", function(event) {
 	event.preventDefault();	
 
 	let listValue = list.value;
-	string.push({value: listValue, complete: false, count: string.length});
+	string.push({value: listValue, complete: false});
 	const listItems = string.map(alist =>`
-	<li>${alist.value}<button onclick="deleteTodo(event, ${alist.count})">x</button><button onclick="complete(event)">completed</button></li>`
+	<li class="${alist.complete ? 'crossout' : ''}">${alist.value}<button onclick="deleteTodo(event, ${string.indexOf(alist)})">x</button><button onclick="complete(event,${string.indexOf(alist)})">completed</button></li>`
 	);
 	
 	// Add the mapped output to the html
